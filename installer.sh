@@ -2,10 +2,16 @@
 
 set -e
 
-wget -nv http://46.249.74.23/QtSdk-offline-linux-x86_64/QtSdk-offline-linux-x86_64-v1.2.1.run
+git clone https://github.com/benlau/qtci.git
 
-chmod +x QtSdk-offline-linux-x86_64-v1.2.1.run
+cd qtci
 
-./QtSdk-offline-linux-x86_64-v1.2.1.run --help
+cat /etc/apt/sources.list
 
-./QtSdk-offline-linux-x86_64-v1.2.1.run --verbose --script ./qt-installer-script.qs
+export WORKDIR=$PWD
+echo $PWD
+source path.env
+wget -c https://download.qt.io/official_releases/online_installers/qt-unified-linux-x64-online.run
+extract-qt-installer --list-packages qt-unified-linux-x64-online.run
+extract-qt-installer qt-unified-linux-x64-online.run ~/QtSDK
+which qmake

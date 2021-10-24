@@ -1,0 +1,33 @@
+name: 'Setup Nokia Qt SDK'
+description: 'Install Nokia Qt SDK and sets HARMATTAN_SDK environment variable.'
+branding:
+  icon: 'play'  
+  color: 'red'  
+
+runs:
+  using: "composite"
+  steps: 
+    - name: Install Build Dependencies
+      shell: bash
+      run: sudo apt-get install -y wget xvfb
+
+    - name: Setup virtual X11
+      shell: bash
+      run: |
+        Xvfb :19 -screen 0 1024x768x16 &
+        export DISPLAY=:19
+
+    - name: Download and Install Nokia Qt SDK
+      shell: bash
+      run: ${{ github.action_path }}/installer.sh
+
+    - name: Finalize SDK installation
+      shell: bash
+      run: |
+        if [ -z "$HARMATTAN_SDK" ]; then
+          echo "Failed to install Nokia Qt SDK"
+          exit 3
+        else
+          echo "Nokia Qt SDK successfully installed to $HARMATTAN_SDK."
+        fi
+        echo "Done..."
